@@ -6,7 +6,7 @@ There is a README.md that explains installing dependencies and running for both 
 
 The resources folder contains the text file used to generate the 3D render and is passed to the backend server on submit.
 
-Programming_Assignment.pdf is the instructions for this project.
+Programming_Assignment.pdf contains the instructions for this project.
 
 # Results
 
