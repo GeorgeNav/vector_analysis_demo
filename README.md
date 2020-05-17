@@ -7,3 +7,14 @@ There is a README.md that explains installing dependencies and running for both 
 The resources folder contains the text file used to generate the 3D render and is passed to the backend server on submit.
 
 Programming_Assignment.pdf is the instructions for this project.
+
+# Results
+
+## 3D result after 'streamline_points.txt' import
+![](resources/images/3d_result.png)
+
+## 3D result and threejs square demo result
+![](resources/images/3d_result_and_demo.png)
+
+## Backend storage result
+![](resources/images/backend_storage.png)
