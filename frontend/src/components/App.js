@@ -1,14 +1,27 @@
 import React from 'react'
 import axios from 'axios'
 import './App.css'
-import { arrayToNChunks } from '../utils/helpers'
-import Model from './three/Model'
+import getLineCoordsFromText from '../utils/helpers'
+import renderSquare from './models/square'
+import renderLines from './models/lines'
 
 // const acceptedFileTypes = ['txt']
 
 function App() {
-  const [ file, setFile ] = React.useState(null)
-  const [ data, setData ] = React.useState(null)
+  const [ curValidFile, setCurValidFile ] = React.useState(null)
+  const [ coordsForLines, setCoordsForLines ] = React.useState(null)
+  const [ renderElements, setRenderElements ] = React.useState([])
+
+  React.useEffect(() => {
+    if(coordsForLines) {
+      const renderLinesElement = renderLines(coordsForLines)
+      const renderSquareElement = renderSquare()
+      setRenderElements([renderLinesElement, renderSquareElement])
+    } else {
+      renderElements.forEach(element => element.remove())
+      setRenderElements([])
+    }
+  }, [coordsForLines])
 
   const getFileData = (e) => {
     e.preventDefault()
@@ -20,24 +33,19 @@ function App() {
     }
 
     const firstFile = e.target.files[0]
-    
-    // convert txt data into matrix of floats
+
     const fileReader = new FileReader()
+
     fileReader.onload = (e) => {
       const text = e.target.result
-      console.log('text:', text)
+      const coordsForLines = getLineCoordsFromText(text)
 
-      // preprocessing and validation
-      let M = text.split(/\r?\n/)
-      M = M.map(row =>
-        row.replace(',', '').trim()
-        .split(' ').map(Number))
-
-      if(M[0].length % 3 === 0) { // check if there are 3 values for each 3D coord
-        const numberOfCoords = M[0].length / 3
-        M = M.map(row => arrayToNChunks(row, numberOfCoords))
-        setData(M)
-        setFile(firstFile) // link file state to current file
+      if(coordsForLines) {
+        setCoordsForLines(coordsForLines)
+        setCurValidFile(firstFile)
+      } else {
+        setCoordsForLines(null)
+        setCurValidFile(null)
       }
     }
 
@@ -45,17 +53,17 @@ function App() {
   }
 
   const sendContent = (e) => {
-    if(file === null) {
-      console.log('ERROR: no file to send')
+    if(curValidFile === null) {
+      alert('Please choose a coordinate file to submit')
       return
     }
 
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('file', curValidFile)
 
     axios.post('http://localhost:8080/upload', formData, {})
-      .then(res => console.log(res.statusText))
-      .catch(err => console.log(err))
+      .then(res => alert(res.statusText))
+      .catch(err => alert(err))
   }
 
   return <div algin='center'>
@@ -63,7 +71,6 @@ function App() {
       <input type='file' name='file' onChange={getFileData}/>
       <button type='submit'>Submit</button>
     </form>
-    {data && <Model data={data}/>}
   </div>
 }
 

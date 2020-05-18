@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-const renderSquare = () => {
+const renderSquareDemo = () => {
   const width = window.innerWidth,
         height = window.innerHeight
 
@@ -16,7 +16,8 @@ const renderSquare = () => {
   renderer.setSize(width, height)
       // setMount(renderer.domElement)
 
-  document.body.appendChild(renderer.domElement)
+  const renderElement = document.body.appendChild(renderer.domElement)
+
   const geometry = new THREE.BoxGeometry(5, 5, 5)
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
   const cube = new THREE.Mesh(geometry, material)
@@ -32,6 +33,7 @@ const renderSquare = () => {
   animate()
 
   renderer.render(scene, camera)
+  return renderElement
 }
 
-export default renderSquare
+export default renderSquareDemo

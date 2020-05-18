@@ -9,7 +9,7 @@ const renderLines = (lines) => {
 
   const renderer = new THREE.WebGLRenderer()
   renderer.setSize(width, height)
-  document.body.appendChild(renderer.domElement)
+  const renderElement = document.body.appendChild(renderer.domElement)
 
 
   let X = [],
@@ -56,6 +56,7 @@ const renderLines = (lines) => {
   camera.lookAt(averageX, averageY, averageZ)
 
   renderer.render(scene, camera)
+  return renderElement
 }
 
 export default renderLines
