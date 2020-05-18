@@ -21,6 +21,10 @@ function App() {
       renderElements.forEach(element => element.remove())
       setRenderElements([])
     }
+    return () => {
+      renderElements.forEach(element => element.remove())
+      setRenderElements([])
+    }
   }, [coordsForLines])
 
   const getFileData = (e) => {
