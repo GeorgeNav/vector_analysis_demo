@@ -53,6 +53,8 @@ function App() {
   }
 
   const sendContent = (e) => {
+    e.preventDefault()
+
     if(curValidFile === null) {
       alert('Please choose a coordinate file to submit')
       return
@@ -62,7 +64,7 @@ function App() {
     formData.append('file', curValidFile)
 
     axios.post('http://localhost:8080/upload', formData, {})
-      .then(res => alert(res.statusText))
+      .then(res => alert('SUCCESS!'))
       .catch(err => alert(err))
   }
 
