@@ -1,10 +1,4 @@
-const express = require('express')
 const multer = require('multer')
-const cors = require('cors')
-
-const app = express()
-
-app.use(cors()) // Allow cross origin
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => { // Where incoming file is stored
@@ -17,7 +11,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-app.post('/upload', (req, res) => {
+
+const express = require('express')
+const router = express.Router()
+
+router.post('/upload', (req, res) => {
   upload.single('file')(req, res, (err) => {
     if(err)
       res.status(500).json(err)
@@ -25,6 +23,10 @@ app.post('/upload', (req, res) => {
   })
 })
 
-const PORT = process.env.PORT || 8080
-app.listen(PORT, () => console.log(`listening on ${PORT}`))
+router.post('/socket', (req, res) => {
 
+})
+
+router.get('/', () => res('CONNECTED'))
+
+module.exports = router

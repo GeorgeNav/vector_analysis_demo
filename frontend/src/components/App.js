@@ -5,9 +5,10 @@ import getLineCoordsFromText from '../utils/helpers'
 import renderSquare from './models/square'
 import renderLines from './models/lines'
 
-// const acceptedFileTypes = ['txt']
+import Socket from './socket/Socket'
 
 function App() {
+  const [ showSocketTime, setShowSocketTime ] = React.useState(false)
   const [ curValidFile, setCurValidFile ] = React.useState(null)
   const [ coordsForLines, setCoordsForLines ] = React.useState(null)
   const [ renderElements, setRenderElements ] = React.useState([])
@@ -73,6 +74,8 @@ function App() {
   }
 
   return <div algin='center'>
+    <button onClick={() => setShowSocketTime(prev => !prev)}></button>
+    {showSocketTime && <Socket/>}
     <form onSubmit={sendContent} align='center'>
       <input type='file' name='file' onChange={getFileData}/>
       <button type='submit'>Submit</button>
