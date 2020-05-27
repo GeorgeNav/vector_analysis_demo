@@ -2,52 +2,53 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 
-const app = express()
-
+// Imports
 const routes = require('./routes')
 
+const app = express()
+
+// Uses
 app.use(cors()) // Allow cross origin
 app.use(routes)
 
+// Create server
 const server = http.createServer(app)
 
-
-
+// Use socket with server
 const socketIo = require('socket.io')
 const io = socketIo(server)
 
-let interval
-let val = 0
 
-const getApiAndEmit = (socket) => {
-  console.log(`\t\t${val} + 1 = ${val + 1}`)
-  const response = val++ + 1
-  socket.emit('FromAPI', response)
-}
+
+
+// Val to listen to
+let val = 0
+const changeValIndefinitely = setInterval(() => {
+  val += 1
+  io.emit('FromAPI', val)
+}, 1000)
 
 io.on('connection', (socket) => {
-  console.log('+ New client connected')
+  console.log(`+ ${socket.id}`)
 
-  if(interval) {
-    console.log('\t- Clearing interval')
-    val = 0
-    clearInterval(interval)
-  }
-
-  console.log('\t+ Setting interval')
-  interval = setInterval(() => getApiAndEmit(socket), 1000)
+  socket.on('SetAPIVal', (newVal) => {
+    if(!isNaN(newVal)) {
+      val = parseInt(newVal)
+      io.emit('FromAPI', val)
+    }
+  })
 
   socket.on('disconnect', () => {
-    console.log('- Client disconnected')
-    val = 0
-    clearInterval(interval)
+    console.log(`- ${socket.id}`)
   })
 })
 
 
 
 
+// Start listening
 const PORT = process.env.PORT || 8080
 
-server.listen(PORT, () => console.log(`listening on ${PORT}`))
-
+server.listen(PORT, () => {
+  console.log(`listening on ${PORT}`)
+})
