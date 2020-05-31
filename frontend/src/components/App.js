@@ -2,13 +2,13 @@ import React from 'react'
 import axios from 'axios'
 import './App.css'
 import getLineCoordsFromText from '../utils/helpers'
-import renderSquare from './models/square'
-import renderLines from './models/lines'
+import renderSquare from './three/models/square'
+import renderLines from './three/models/lines'
 
 import Socket from './socket/Socket'
 
 function App() {
-  const [ showSocketTime, setShowSocketTime ] = React.useState(false)
+  const [ showSocketValue, setShowSocketValue ] = React.useState(false)
   const [ curValidFile, setCurValidFile ] = React.useState(null)
   const [ coordsForLines, setCoordsForLines ] = React.useState(null)
   const [ renderElements, setRenderElements ] = React.useState([])
@@ -27,7 +27,7 @@ function App() {
     return removeElements
   }, [coordsForLines])
 
-  const getFileData = (e) => {
+  const getLineDataFromFile = (e) => {
     e.preventDefault()
     const fileCount = e.target.files.length
 
@@ -73,10 +73,10 @@ function App() {
   }
 
   return <div algin='center'>
-    <button onClick={() => setShowSocketTime(prev => !prev)}></button>
-    {showSocketTime && <Socket/>}
+    <button onClick={() => setShowSocketValue(prev => !prev)}>{showSocketValue ? 'Disconnect' : 'Connect To'} Socket Value</button><br/>
+    {showSocketValue && <Socket/>}
     <form onSubmit={sendContent} align='center'>
-      <input type='file' name='file' onChange={getFileData}/>
+      <input type='file' name='file' onChange={getLineDataFromFile}/>
       <button type='submit'>Submit</button>
     </form>
   </div>
