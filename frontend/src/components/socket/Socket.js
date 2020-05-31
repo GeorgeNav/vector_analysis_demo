@@ -24,17 +24,16 @@ const useSocket = () => {
 }
 
 const Socket = () => {
-  const [response, setResponse] = React.useState(null)
+  const [value, setValue] = React.useState(null)
   const socket = useSocket()
   const inputRef = React.useRef()
 
   React.useEffect(() => {
     socket.on('FromAPI', data => {
-      setResponse(data)
+      setValue(data)
     })
 
     return () => {
-      console.log('STOPPING COMP')
       socket.removeEventListener('FromAPI', () => { console.log('DONE') })
     }
   }, [])
@@ -42,11 +41,14 @@ const Socket = () => {
   const sendNewVal = () => {
     const newVal = inputRef.current.value
     if(!isNaN(newVal))
-      socket.emit('SetAPIVal', newVal)
+      socket.emit('SetAPIVal', newVal, (message) => {
+        console.log(message)
+        setValue(newVal)
+      })
   }
 
   return <div>
-    It's <time dateTime={response}>{response}</time>
+    It's <time dateTime={value}>{value}</time>
     <input type='text' ref={inputRef}/>
     <button onClick={sendNewVal}>Send New Val</button>
   </div>

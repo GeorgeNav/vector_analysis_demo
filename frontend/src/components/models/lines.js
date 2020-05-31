@@ -17,7 +17,7 @@ const renderLines = (lines) => {
       Z = []
 
   const createLine = (line) => {
-    const material = new THREE.LineBasicMaterial({ color: Math.random()*0xFFFFFF<<0 }) // blue line
+    const material = new THREE.LineBasicMaterial({ color: Math.random()*0xFFFFFF<<0 })
 
     const points = []
 

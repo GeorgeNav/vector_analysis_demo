@@ -13,19 +13,18 @@ function App() {
   const [ coordsForLines, setCoordsForLines ] = React.useState(null)
   const [ renderElements, setRenderElements ] = React.useState([])
 
+  const removeElements = React.useCallback(() => {
+    renderElements.forEach(element => element.remove())
+    setRenderElements([])
+  })
+
   React.useEffect(() => {
     if(coordsForLines) {
       const renderLinesElement = renderLines(coordsForLines)
       const renderSquareElement = renderSquare()
       setRenderElements([renderLinesElement, renderSquareElement])
-    } else {
-      renderElements.forEach(element => element.remove())
-      setRenderElements([])
-    }
-    return () => {
-      renderElements.forEach(element => element.remove())
-      setRenderElements([])
-    }
+    } else removeElements()
+    return removeElements
   }, [coordsForLines])
 
   const getFileData = (e) => {

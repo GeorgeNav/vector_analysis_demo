@@ -31,10 +31,13 @@ const changeValIndefinitely = setInterval(() => {
 io.on('connection', (socket) => {
   console.log(`+ ${socket.id}`)
 
-  socket.on('SetAPIVal', (newVal) => {
+  socket.on('SetAPIVal', (newVal, callback) => {
     if(!isNaN(newVal)) {
       val = parseInt(newVal)
       io.emit('FromAPI', val)
+      callback('SUCCESS: API CONFIRMED NEW VALUE IS VALID AND IMPLEMENTED')
+    } else {
+      callback('ERROR: value is not a number')
     }
   })
 
